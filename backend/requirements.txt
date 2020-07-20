@@ -9,10 +9,10 @@ idna==2.10
 urllib3==1.25.9
 chardet==3.0.4
 psycopg2==2.7.3.2
-pyhunter==0.3
-PyJWT==1.5.3
-pytz==2018.3
 clearbit==0.1.7
-six==1.11.0
 username-generator==2.0.0
+pyhunter==1.7
+PyJWT==1.7.1
+pytz==2020.1
+six==1.15.0
 gunicorn

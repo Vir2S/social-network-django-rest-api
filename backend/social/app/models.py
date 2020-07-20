@@ -16,7 +16,7 @@ class SocialUser(AbstractUser, models.Model):
 
 
 class Post(models.Model):
-    user = models.ForeignKey(SocialUser, related_name='posts')
+    user = models.ForeignKey(SocialUser, related_name='posts', on_delete=models.CASCADE)
     title = models.CharField(max_length=250, unique=True)
     added = models.DateTimeField(auto_now_add=True)
     text = models.TextField()

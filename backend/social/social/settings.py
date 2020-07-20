@@ -14,21 +14,28 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from datetime import timedelta
+import clearbit
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'rvsns0br*%b2mi6l8%cdh#-a1lk)c+a@=@uv1k4z92$^g&^v*0'
+SECRET_KEY = 'qtx#a#()ic%_s@azb8%p+m!vm6hmxw8#c)p7@^xgmcxx6m2tg$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+#User settings
+AUTH_USER_MODEL = 'app.SocialUser'
+DEFAULT_USER_TYPE_ALIAS = "GUEST"
 
 # Application definition
 
@@ -39,6 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_auth',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +86,14 @@ WSGI_APPLICATION = 'social.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
+    #     'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'postgres',
+    #     'PASSWORD': 'social',
+    #     'HOST': os.getenv('SOCIAL_DB_HOST','localhost'),
+    #     'USER': 'social',
+    #     'PORT': '5432',
+    # },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
@@ -84,7 +102,7 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -120,3 +138,43 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+        # 'dry_rest_permissions.generics.DRYPermissions',
+    ),
+    # 'DEFAULT_PAGINATION_CLASS': None,
+    # 'PAGE_SIZE': 10,
+}
+
+# JWT conf
+REST_USE_JWT = True
+
+JWT_AUTH = {
+    'JWT_SECRET_KEY': SECRET_KEY,
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_EXPIRATION_DELTA': timedelta(hours=1),
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=2),
+    'JWT_ALLOW_REFRESH': True,
+}
+
+#Clearbit
+clearbit.key = os.getenv('CLEARBIT_SECRET', 'sk_1d9a04a08f006b1c4f333f070fc1bc0d')
+CLEARBIT_PUBLIC = os.getenv('CLEARBIT_PUBLIC', 'pk_6d4f1fc73e112388f8e1c6fb20bb12d8')
+
+# Email Hunter
+HUNTER_API_KEY = os.getenv('HUNTER_API_KEY', '238af370304363132c7345371b5e052e3a856979')
+
+# SocialBot secret handshake
+BOT_SECRET_NAME = os.getenv('BOT_SECRET_NAME', 'botcuga')
+
+# Fixtures
+FIXTURE_DIRS = (BASE_DIR + '/app/fixtures/')
