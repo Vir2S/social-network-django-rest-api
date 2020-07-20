@@ -1,0 +1,15 @@
+[
+  {
+    "model": "app.SocialUser",
+    "pk": null,
+    "fields": {
+      "first_name": "Tato",
+      "last_name": "Tatovych",
+      "password": "tato1234",
+      "email": "tato@tato.com",
+      "is_superuser": false,
+      "is_staff": false,
+      "groups": []
+    }
+  }
+]

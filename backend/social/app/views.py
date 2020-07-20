@@ -1,3 +1,5 @@
+# Developed by Vitaly Sem
+
 import base64
 from copy import deepcopy
 import clearbit
