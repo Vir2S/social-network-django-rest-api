@@ -1,9 +1,11 @@
+# Developed by Vitaly Sem
+
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
 class IsSuperuser(BasePermission):
     """
-    Allows access only to superusers.
+        Allows access only to superusers.
     """
     def has_permission(self, request, view):
         return request.user and request.user.is_superuser

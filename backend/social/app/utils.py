@@ -1,3 +1,5 @@
+# Developed by Vitaly Sem
+
 from django.conf import settings
 from pyhunter import PyHunter
 
