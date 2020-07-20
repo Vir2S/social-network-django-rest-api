@@ -1,3 +1,5 @@
+# Developed by Vitaly Sem
+
 """social URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -14,8 +16,32 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
+from app import views
+
+
+router = routers.DefaultRouter()
+router.register('users', views.UserViewSet)
+router.register('posts', views.PostViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Model views
+    path('api/', include(router.urls)),
+
+    # Rest auth
+    path('', include('rest_auth.urls')),
+
+    # Custom Signup/Login functionality
+    path('sign-up/', views.signup, name="signup_user"),
+    path('login/', views.login, name="login_user"),
+
+    path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    path('auth-jwt/', obtain_jwt_token, name="token_auth"),
+    path('auth-jwt-refresh/', refresh_jwt_token),
+    path('auth-jwt-verify/', verify_jwt_token),
 ]
