@@ -12,7 +12,7 @@ class SignUpSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(required=False)
     username = serializers.CharField(
         required=True,
-        validators = [UniqueValidator(queryset=SocialUser.objects.all())]
+        validators=[UniqueValidator(queryset=SocialUser.objects.all())]
     )
     email = serializers.EmailField(
         required=True,
@@ -25,32 +25,31 @@ class SignUpSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = (
             'id',
-            'email',
             'username',
-            'password',
+            'email',
             'first_name',
             'last_name',
+            'password',
         )
 
 
 class SocialUserSerializer(serializers.ModelSerializer):
-    fullname = serializers.SerializerMethodField('_get_full_name')
+    username = serializers.SerializerMethodField('_get_username')
 
-    def _get_full_name(self, obj):
-        return obj.fullname
+    def _get_username(self, obj):
+        return obj.username
 
     class Meta:
         model = get_user_model()
         fields = (
             'id',
-            'fullname',
-            'first_name',
-            'last_name',
-            'last_login',
             'username',
             'email',
+            'first_name',
+            'last_name',
             'is_superuser',
             'is_staff',
+            'last_login',
             'date_joined',
             'user_permissions',
             'groups',
