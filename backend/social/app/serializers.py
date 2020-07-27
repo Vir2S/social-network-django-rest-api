@@ -10,15 +10,18 @@ from app.models import SocialUser, Post
 class SignUpSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
+
     username = serializers.CharField(
         required=True,
         validators=[UniqueValidator(queryset=SocialUser.objects.all())]
     )
+
     email = serializers.EmailField(
         required=True,
         validators=[UniqueValidator(queryset=SocialUser.objects.all())]
 
     )
+
     password = serializers.CharField(max_length=128, required=True)
 
     class Meta:

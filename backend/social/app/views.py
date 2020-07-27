@@ -66,12 +66,15 @@ def signup(request, *args, **kwargs):
 
     # If it is not Bot then check if email is valid and enrich it, if possible
     bot_check = base64.b64decode(data.pop('bot', '')).decode('utf-8') == settings.BOT_SECRET_NAME
+
     if not bot_check:
         e_hunter_response = e_hunter.email_verifier(data.get('email'))
+
         if e_hunter_response['result'] == 'undeliverable':
             return Response('Email does not exist!', status=status.HTTP_400_BAD_REQUEST)
 
         clearbit_response = clearbit.Enrichment.find(email=data['email'], stream=True)
+
         if clearbit_response.get('person'):
             data.update(
                 {
@@ -81,6 +84,7 @@ def signup(request, *args, **kwargs):
             )
 
     serializer = SignUpSerializer(data=data)
+
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -104,5 +108,4 @@ def login(request, *args, **kwargs):
     user.save()
     payload = jwt_payload_handler(user)
     jwt_token = jwt_encode_handler(payload)
-
     return Response({"token": jwt_token})
