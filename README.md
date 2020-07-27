@@ -7,13 +7,13 @@ Python Django Social Network REST API
         /sign-up/
         method POST
         payload_to_create={'username': username, 'email': email, 'password': password}
-        respone serialized data
+        response serialized data
 
     - login:
         /login/
         method POST
         payload_to_create={'username': username, 'password': password}
-        respone user serialized data and auth cred
+        response user serialized data and auth cred
 
     - users:
         -/api/users/

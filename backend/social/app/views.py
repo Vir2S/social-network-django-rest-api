@@ -17,7 +17,7 @@ from rest_framework_jwt.utils import jwt_payload_handler, jwt_encode_handler
 from app.models import SocialUser, Post
 from app.permissions import UserIsOwner
 from app.serializers import SocialUserSerializer, PostSerializer, SignUpSerializer
-from app.utils import ehunter
+from app.utils import e_hunter
 
 
 class UserViewSet(ModelViewSet):
@@ -64,23 +64,29 @@ def signup(request, *args, **kwargs):
     """
     data = deepcopy(request.data)
 
-    # If it is not SocialBot then check if email is valid and enrich it, if possible
+    # If it is not Bot then check if email is valid and enrich it, if possible
     bot_check = base64.b64decode(data.pop('bot', '')).decode('utf-8') == settings.BOT_SECRET_NAME
+
     if not bot_check:
-        ehunter_response = ehunter.email_verifier(data.get("email"))
-        if ehunter_response['result'] == 'undeliverable':
+        e_hunter_response = e_hunter.email_verifier(data.get('email'))
+
+        if e_hunter_response['result'] == 'undeliverable':
             return Response('Email does not exist!', status=status.HTTP_400_BAD_REQUEST)
 
-        clearbit_response = clearbit.Enrichment.find(email=data["email"], stream=True)
+        clearbit_response = clearbit.Enrichment.find(email=data['email'], stream=True)
+
         if clearbit_response.get('person'):
-            data.update({
-                        "first_name": clearbit_response['person']['name']['givenName'],
-                        "last_name": clearbit_response['person']['name']['familyName'],
-                    })
+            data.update(
+                {
+                    'first_name': clearbit_response['person']['name']['givenName'],
+                    'last_name': clearbit_response['person']['name']['familyName'],
+                    }
+            )
 
     serializer = SignUpSerializer(data=data)
+
     if not serializer.is_valid():
-        return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     SocialUser.objects.create_user(**serializer.validated_data)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -102,6 +108,4 @@ def login(request, *args, **kwargs):
     user.save()
     payload = jwt_payload_handler(user)
     jwt_token = jwt_encode_handler(payload)
-
     return Response({"token": jwt_token})
-
