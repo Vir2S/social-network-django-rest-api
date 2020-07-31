@@ -1,3 +1,5 @@
+# Developed by Vitaly Sem
+
 import os
 
 from django.core.management.base import BaseCommand

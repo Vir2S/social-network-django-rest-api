@@ -32,9 +32,9 @@ class SocialBot(object):
         else:
             raise ex.BotNoInitialData("You didn't set json data or path to json.")
 
-        self.number_of_users = self.json['number_of_users'] if self.json.get('number_of_users') else 1
-        self.max_posts_per_user = self.json['max_posts_per_user'] if self.json.get('max_posts_per_user') else 1
-        self.max_likes_per_user = self.json['max_likes_per_user'] if self.json.get('max_likes_per_user') else 1
+        self.number_of_users = self.json('number_of_users', 1)
+        self.max_posts_per_user = self.json('max_posts_per_user', 1)
+        self.max_likes_per_user = self.json('max_likes_per_user', 1)
 
     @staticmethod
     def _pw_gen(size=8, chars=string.ascii_letters + string.digits):
