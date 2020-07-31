@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class SocialUser(AbstractUser, models.Model):
+class SocialUser(AbstractUser):
 
     @property
     def fullname(self):
