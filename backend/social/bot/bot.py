@@ -164,24 +164,3 @@ class SocialBot(object):
                 current_user = self.number_of_users - reached_max_likes
 
         print('All users reached max number of likes!')
-
-#
-# def add_arguments(self, parser):
-#     parser.add_argument('--data', nargs='?', type=str)
-#
-#
-# def handle(self, *args, **options):
-#     data = json.load(open(options.get('data'), 'r'))
-#     bot = SocialBot(json_data=data)
-#
-#     bot.signup_users()
-#     bot.login_users()
-#     bot.create_posts()
-#
-#     # Craziness happens when you like someone :)
-#     bot.like_logic()
-#
-#
-# # RUN
-# client = SocialBot()
-# client.run()
